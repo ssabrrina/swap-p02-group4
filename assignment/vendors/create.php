@@ -3,7 +3,7 @@
 include '../config.php'; 
 include '../security.php'; 
 
-// Restrict access to Admin (1) and Procurement Officer (3)
+// restrict access to Admin (1) and Procurement Officer (3)
 restrictAccess([1, 3], "../dashboard.php", "You do not have access to this page. Redirecting to Dashboard...");
 
 $error = ""; 
@@ -17,7 +17,9 @@ $csrf_token = generateCsrfToken();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validate CSRF token before processing the request
     if (!isset($_POST['csrf_token']) || !validateCsrfToken($_POST['csrf_token'])) {
-        die("CSRF validation failed! Unauthorized request.");
+        $_SESSION['error_message'] = "Unsuccessful Vendor creation. CSRF validation failed!";
+        header("Location: create.php");
+        exit;
     }
 
     // sanitize and validate user inputs
@@ -94,6 +96,11 @@ $payment_terms = $conn->query("SELECT payment_id, name FROM payment_terms");
             <div class="message error"><?= htmlspecialchars($error) ?></div>
         <?php endif; ?>
 
+        <?php if (isset($_SESSION['error_message'])): ?>
+            <div class="message error"><?= htmlspecialchars($_SESSION['error_message']) ?></div>
+            <?php unset($_SESSION['error_message']); // Clear message after displaying ?>
+        <?php endif; ?>
+
         <!-- Display success messages if any -->
         <?php if (!empty($success)): ?>
             <div class="message success"><?= htmlspecialchars($success) ?></div>
@@ -154,3 +161,4 @@ $payment_terms = $conn->query("SELECT payment_id, name FROM payment_terms");
     <?php endif; ?>
 </body>
 </html>
+
