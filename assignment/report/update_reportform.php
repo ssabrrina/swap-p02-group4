@@ -39,7 +39,7 @@ $row = $result->fetch_assoc();
     }
 
     header {
-        background: url('header.jpg'); /* Path to your header background image */
+        background: url('imgs/header-bg.png'); /* Path to your header background image */
         background-size: cover;
         color: white;
         text-align: center;
