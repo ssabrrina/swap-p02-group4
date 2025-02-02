@@ -102,6 +102,37 @@ $row = $result->fetch_assoc();
         text-align: right;
     }
 
+    nav {
+        background-color: #383737; /* Dark background for the navigation bar */
+        overflow: hidden;
+    }
+
+    ul {
+        list-style-type: none; /* Removes bullet points from the list */
+        padding: 0;
+        margin: 0;
+        display: flex; /* Layout the list items in a row */
+        justify-content: left; /* Center the navigation links horizontally */
+    }
+
+    li {
+        float: left;
+        }
+
+    li a {
+        display: block; /* Make the links fill the entire list item */
+        color: white; /* White text color */
+        text-align: left;
+        padding: 20px 24px; /* Padding inside each link */
+        text-decoration: none; /* Remove underline from links */
+        transition: background-color 0.3s; /* Smooth transition for hover effect */
+    }
+
+    li a:hover {
+        background-color: #ddd; /* Light background on hover */
+        color: black; /* Change text color on hover */
+    }
+
     footer {
         background-color: white; /* White background */
         text-align: center;
@@ -114,6 +145,16 @@ $row = $result->fetch_assoc();
         <h4>AMC Internal Procurement Management System</h4>
     </div>
 </header>
+<nav>
+    <ul>
+    <li><a href="../dashboard.php">Dashboard</a></li>
+        <li><a href="../vendors/vendor.php">Vendor</a></li>
+        <li><a href="../inventory/inventory.php">Inventory Management</a></li>
+        <li><a href="../procurement/procurement.php">Procurement Request</a></li>
+        <li><a href="../report/report.php">Report</a></li>
+        <li><a href="../logout.php">Log Out</a></li>
+    </ul>
+</nav>
 <body>
 <div class="container">
 <h2>Edit Procurement Activities Report</h2>
