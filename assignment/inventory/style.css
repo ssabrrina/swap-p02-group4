@@ -1,0 +1,264 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4; /* Beige background */
+    color: black;
+}
+
+header {
+    background: url('imgs/header-bg.png'); /* Path to your header background image */
+    background-size: cover;
+    color: white;
+    text-align: center;
+    padding:80px 0;
+}
+
+.header-content {
+    background-color: black; /* Black background for the text box */
+    display: inline-block;
+    padding: 10px 20px;
+}
+
+.container {
+    width: 100%;
+    max-width: 800px;
+    margin: 50px auto;
+    padding: 20px;
+}
+
+.form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+
+
+label {
+    width: 150px;
+    margin-right: 10px;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="password"],
+select,
+textarea {
+    flex: 1;
+    padding: 10px;
+    background: white; /* White background */
+    border: 1px solid black; /* Thin black outline */
+    border-radius: 4px;
+    color: black;
+    width:100%
+}
+
+textarea {
+    height: 80px;
+}
+
+.add-inventory-button {
+    margin-bottom: 20px;
+    text-align: left; /* Aligns button to the left */
+}
+
+button {
+    background-color: #6200ea; /* Purple background */
+    color: white;
+    border: 1px solid black; /* Thin black outline */
+    padding: 12px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    display: block;
+    width: fit-content;
+    margin-left: left; /* Align button to the right */
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table, th, td {
+    border: 1px solid #ccc;
+}
+
+th, td {
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f4f4f4;
+}
+
+.button-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center; /* Centers buttons horizontally */
+    gap: 15px; /* Adds spacing between buttons */
+    padding: 20px 0;
+}
+
+
+
+.inventory-table {
+    width:100%;
+    border-collapse: collapse; /* Ensures borders between cells are merged */
+    margin: 20px 0; /* Adds space above and below the table */
+}
+
+.inventory-table th, .inventory-table td {
+    border: 1px solid #ccc; /* Adds a light grey border around table cells */
+    padding: 18px; /* Increases padding inside cells for more space around text */
+    text-align: center; /* Centers text horizontally */
+    vertical-align: middle; /* Centers text vertically */
+    word-spacing: 3px; /* Increases space between words within the cells */
+}
+
+.inventory-table th {
+    background-color: #f4f4f4; /* A light grey background for header cells */
+    font-weight: bold; /* Makes text in header cells bold */
+}
+
+.btn-edit {
+    background-color: #007bff; /* Bootstrap primary blue */
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-delete {
+    background-color: #dc3545; /* Bootstrap danger red */
+    color: white;
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn-create {
+    display: block;       /* Block display to fill the width of the container */
+    margin-left: auto;    /* Auto margin on the left to push it to the right */
+    margin-right: 20px;   /* Optional: Right margin for spacing */
+}
+
+.btn-update {
+    display: block;        /* Block display to fill the width of the container */
+    margin-left: auto;     /* Auto margin on the left to push it to the right */
+    margin-right: 20px;    /* Optional: Right margin for spacing */
+}
+
+
+.btn-edit:hover {
+    background-color: #171aba;
+}
+
+.btn-delete:hover {
+    background-color: #3d0202;
+}
+
+/* Navigation bar styling */
+.navigation {
+    background-color: #383737; /* Dark background for the navigation bar */
+    overflow: hidden;
+    margin-bottom: 20px; /* Space between nav and content */
+}
+
+.navigation ul {
+    list-style-type: none; /* Removes bullet points from the list */
+    padding: 0;
+    margin: 0;
+    display: flex; /* Layout the list items in a row */
+    justify-content: left; /* Center the navigation links horizontally */
+}
+
+.navigation ul li {
+    float: left;
+}
+
+.navigation ul li a {
+    display: block; /* Make the links fill the entire list item */
+    color: white; /* White text color */
+    text-align: left;
+    padding: 20px 24px; /* Padding inside each link */
+    text-decoration: none; /* Remove underline from links */
+    transition: background-color 0.3s; /* Smooth transition for hover effect */
+}
+
+.navigation ul li a:hover {
+    background-color: #ddd; /* Light background on hover */
+    color: black; /* Change text color on hover */
+}
+
+
+button:hover {
+    background-color: #3700b3; /* Darker purple on hover */
+}
+
+.btn-secondary {
+    background-color: #6c757d; /* Bootstrap secondary color */
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.btn-secondary:hover {
+    background-color: #5a6268; /* Darken the button on hover */
+    color: #fff;
+}
+
+
+footer {
+    width: 100%;
+    background-color: white; /* White background */
+    text-align: center;
+    padding: 60px 0;
+    
+}
+
+/* Container to align welcome text left and profile right */
+.profile-container {
+    display: flex;
+    justify-content: space-between; /* Push elements apart */
+    align-items: center; /* Align vertically */
+}
+
+.welcome-text {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* Profile icon and text stacked vertically */
+.profile-link {
+    display: flex;
+    flex-direction: column; /* Stack icon & text */
+    align-items: center;
+    text-decoration: none;
+    color: black;
+    font-weight: bold;
+    transition: color 0.3s ease;
+}
+
+.profile-link:hover {
+    color: #6200ea; /* Change text color on hover */
+}
+
+.profile-link img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: 2px solid #ccc; /* Optional: Add border */
+    transition: transform 0.2s ease-in-out;
+}
+
+.profile-link:hover img {
+    transform: scale(1.1); /* Slight zoom effect */
+}
