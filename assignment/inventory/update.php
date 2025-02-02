@@ -1,9 +1,9 @@
 <?php
-include 'security.php'; // Include security functions
-include 'config.php';
-include 'header.php';
-include 'navigation.php'; 
-include 'back_button.php';
+include '../security.php'; // Include security functions
+include '../config.php';
+include '../header.php';
+include '../navigation.php'; 
+include '../back_button.php';
 
 // Establish a new mysqli connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -137,4 +137,4 @@ $conn->close();
 </div> 
 
 
-<?php include 'footer.php'; ?>
+<?php include '../footer.php'; ?>
