@@ -1,5 +1,10 @@
 <?php
-include 'config.php';
+include '../config.php';
+include '../security.php';
+
+
+// Restrict access to Admins only
+restrictAccess([1], "../dashboard.php", "You do not have permission to delete procurement requests.");
 
 // Establish a new mysqli connection
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -20,7 +25,7 @@ if (isset($_GET['id']) && is_numeric($_GET['id'])) {
     // Execute the statement with parameter binding
     if ($stmt->execute()) {
         // If the deletion is successful, redirect to the inventory page with a success message
-        header("Location: inventory.php?success=delete");
+        echo "<script>alert('Inventory item deleted successfully!'); window.location.href='inventory.php';</script>";
         exit();
     } else {
         // If the deletion fails, redirect back to the inventory page with an error message
