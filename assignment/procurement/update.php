@@ -1,18 +1,20 @@
 <?php
 include '../config.php'; // Database connection
 include '../security.php';
+include '../header.php';
+include '../navigation.php';
 
-// ✅ Restrict Access: Only Role ID 1 (Admin) & Role ID 3 (Procurement Officer) can access
+// Restrict Access: Only Role ID 1 (Admin) & Role ID 3 (Procurement Officer) can access
 restrictAccess([1, 3], "../dashboard.php", "You do not have permission to access this page.");
 
-// ✅ Check if `procurement_id` is provided in URL
+// Check if `procurement_id` is provided in URL
 if (!isset($_GET['procurement_id'])) {
     die("Error: Procurement ID is missing.");
 }
 
 $procurement_id = intval($_GET['procurement_id']); // Convert to integer for security
 
-// ✅ Fetch procurement details
+// Fetch procurement details
 $query = "SELECT p.procurement_id, p.item_id, p.quantity, p.priority_level, p.status, 
                 i.name AS item_name 
         FROM procurement p
@@ -29,44 +31,61 @@ if ($result->num_rows === 0) {
 
 $procurement = $result->fetch_assoc();
 
-
-// ✅ Handle form submission
+// Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    // ✅ Validate CSRF Token
+    // Validate CSRF Token
     if (!validateCsrfToken($_POST['csrf_token'])) {
         die("<script>alert('Invalid CSRF token. Please try again.'); window.location.href='procurement.php';</script>");
     }
 
-    // ✅ Ensure procurement_id is set
+    // Ensure procurement_id is set
     if (!isset($_POST['procurement_id'])) {
         die("Error: Procurement ID is missing.");
     }
 
-        // ✅ Sanitize Inputs
-        $procurement_id = intval($_POST['procurement_id']);
-        $quantity = intval($_POST['quantity']);
-        $priority_level = htmlspecialchars($_POST['priority_level'], ENT_QUOTES, 'UTF-8');
-        $status = htmlspecialchars($_POST['status'], ENT_QUOTES, 'UTF-8');
+    // Sanitize Inputs
+    $procurement_id = intval($_POST['procurement_id']);
+    $quantity = trim($_POST['quantity']);
+    $priority_level = trim($_POST['priority_level']);
+    $status = trim($_POST['status']);
 
-        // ✅ Debugging: Check if values are received
-        if (empty($quantity) || empty($priority_level) || empty($status) ) {
-            die("Error: Missing required fields.");
-        }
+    // Ensure Quantity is a Whole Positive Number
+    if (!ctype_digit($quantity) || intval($quantity) <= 0) {
+        die("<script>alert('Error: Quantity must be a positive whole number greater than 0.'); window.location.href='update.php?procurement_id=$procurement_id';</script>");
+    }
 
-        // ✅ Prepare update query
-        $update_query = "UPDATE procurement 
-                        SET quantity = ?, priority_level = ?, status = ? 
-                        WHERE procurement_id = ?";
-        $stmt = $conn->prepare($update_query);
-        $stmt->bind_param("issi", $quantity, $priority_level, $status, $procurement_id);
+    //  Validate Status - Prevent SQL Injection
+    $allowed_statuses = ["PENDING", "APPROVED", "COMPLETED"];
+    if (!in_array(strtoupper($status), $allowed_statuses)) {
+        die("<script>alert('Error: Invalid status.'); window.location.href='update.php?procurement_id=$procurement_id';</script>");
+    }
 
-        if ($stmt->execute()) {
-            // ✅ Redirect after successful update
-            header("Location: procurement.php?update_success=1");
-            exit();
-        } else {
-            die("Error updating procurement request: " . $stmt->error);
-        }
+    // Validate Priority Level - Prevent SQL Injection
+    $allowed_priorities = ["Low", "Medium", "High"];
+    if (!in_array($priority_level, $allowed_priorities)) {
+        die("<script>alert('Error: Invalid priority level.'); window.location.href='update.php?procurement_id=$procurement_id';</script>");
+    }
+
+    // Prevent Reverting Completed Requests
+    if ($procurement['status'] === "COMPLETED" && $status !== "COMPLETED") {
+        die("<script>alert('Error: Cannot revert a completed procurement request.'); window.location.href='update.php?procurement_id=$procurement_id';</script>");
+    }
+
+    // Convert to integer only after validation
+    $quantity = intval($quantity);
+
+    // Prepare update query (SQL Injection Safe)
+    $update_query = "UPDATE procurement 
+                    SET quantity = ?, priority_level = ?, status = ? 
+                    WHERE procurement_id = ?";
+    $stmt = $conn->prepare($update_query);
+    $stmt->bind_param("issi", $quantity, $priority_level, $status, $procurement_id);
+
+    if ($stmt->execute()) {
+        echo "<script>alert('Procurement request updated successfully!'); window.location.href='procurement.php';</script>";
+    } else {
+        die("Error updating procurement request: " . $stmt->error);
+    }
 }
 ?>
 
@@ -91,28 +110,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <div class="form-group">
                 <label>Quantity:</label>
-                <input type="number" name="quantity" value="<?= isset($procurement['quantity']) ? htmlspecialchars($procurement['quantity']) : '' ?>" required>
+                <input type="number" name="quantity" value="<?= isset($procurement['quantity']) ? htmlspecialchars($procurement['quantity']) : '' ?>" min="1" required>
             </div>
 
             <div class="form-group">
                 <label>Priority Level:</label>
-                <select name="priority_level">
-                    <option value="Low" <?= isset($procurement['priority_level']) && $procurement['priority_level'] == 'Low' ? 'selected' : '' ?>>Low</option>
-                    <option value="Medium" <?= isset($procurement['priority_level']) && $procurement['priority_level'] == 'Medium' ? 'selected' : '' ?>>Medium</option>
-                    <option value="High" <?= isset($procurement['priority_level']) && $procurement['priority_level'] == 'High' ? 'selected' : '' ?>>High</option>
-                </select>
+                <input type="text" name="priority_level" list="priority_levels" value="<?= htmlspecialchars($procurement['priority_level']) ?>" required>
+                <datalist id="priority_levels">
+                    <option value="Low">Low</option>
+                    <option value="Medium">Medium</option>
+                    <option value="High">High</option>
+                </datalist>
             </div>
 
             <div class="form-group">
                 <label>Status:</label>
-                <select name="status">
-                    <option value="pending" <?= isset($procurement['status']) && $procurement['status'] == 'pending' ? 'selected' : '' ?>>Pending</option>
-                    <option value="approved" <?= isset($procurement['status']) && $procurement['status'] == 'approved' ? 'selected' : '' ?>>Approved</option>
-                    <option value="completed" <?= isset($procurement['status']) && $procurement['status'] == 'completed' ? 'selected' : '' ?>>Completed</option>
-                </select>
+                <input type="text" name="status" list="statuses" value="<?= htmlspecialchars($procurement['status']) ?>" required>
+                <datalist id="statuses">
+                    <option value="PENDING">Pending</option>
+                    <option value="APPROVED">Approved</option>
+                    <option value="COMPLETED">Completed</option>
+                </datalist>
             </div>
 
-            
             <input type="hidden" name="csrf_token" value="<?= generateCsrfToken(); ?>">
             <input type="hidden" name="procurement_id" value="<?= htmlspecialchars($procurement_id); ?>">
             <button type="submit" class="create">Update Procurement Request</button>
@@ -123,3 +143,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 </body>
 </html>
+
+<?php include '../footer.php'; ?>

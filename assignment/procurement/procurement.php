@@ -4,10 +4,10 @@ include '../security.php';
 include '../header.php';
 include '../navigation.php';
 
-// ✅ Restrict Access: Only Role ID 1 (Admin) & Role ID 3 (Procurement Officer) can access
+// Restrict Access: Only Role ID 1 (Admin) & Role ID 3 (Procurement Officer) can access
 restrictAccess([1, 3], "dashboard.php", "You do not have permission to access this page.");
 
-// ✅ Fetch all procurement requests with JOIN to get actual names and the user who created the request
+// Fetch all procurement requests with JOIN to get actual names and the user who created the request
 $query = "SELECT 
             p.procurement_id, 
             i.name AS item_name, 
@@ -55,7 +55,7 @@ if (!$result) {
 </head>
 <body>
     <h1>Procurement Requests</h1>
-    <!-- ✅ Create Procurement Request Button -->
+    <!-- Create Procurement Request Button -->
     <a href="create.php"><button class="button.create">+ Create Procurement Request</button></a>
 
     <?php if ($result->num_rows > 0): ?>
@@ -84,9 +84,9 @@ if (!$result) {
                     <td>
                         <div class="button-group"> <!-- Flexbox container -->
                             <button onclick="window.location.href='update.php?procurement_id=<?= $row['procurement_id'] ?>'">Update</button>
-                            
+                                    <!--(isset($_SESSION['session_role']))-->
                             <?php if ($_SESSION['session_role'] == 1): ?> <!-- ✅ Only Role ID 1 sees delete button -->
-                                    <!-- ✅ Secure Form for Deletion with CSRF Protection -->
+                                    <!-- Secure Form for Deletion with CSRF Protection -->
                                     <form method="post" action="delete.php" style="display:inline;">
                                         <input type="hidden" name="procurement_id" value="<?= $row['procurement_id'] ?>">
                                         <input type="hidden" name="csrf_token" value="<?= generateCsrfToken(); ?>">

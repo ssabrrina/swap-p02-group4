@@ -2,40 +2,40 @@
 include '../config.php'; // Database connection
 include '../security.php';
 
-// ✅ Restrict access to Admins only
+// Restrict access to Admins only
 restrictAccess([1], "../dashboard.php", "You do not have permission to delete procurement requests.");
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // ✅ Check if CSRF token exists before validating
+    // Check if CSRF token exists before validating
     if (!isset($_POST['csrf_token']) || empty($_POST['csrf_token'])) {
         die("<script>alert('CSRF token is missing. Please try again.'); window.location.href='procurement.php';</script>");
     }
 
-    // ✅ Validate CSRF Token
+    // Validate CSRF Token
     if (!validateCsrfToken($_POST['csrf_token'])) {
         die("<script>alert('Invalid CSRF token. Please try again.'); window.location.href='procurement.php';</script>");
     }
 
-    // ✅ Check if procurement_id exists in the request
+    // Check if procurement_id exists in the request
     if (!isset($_POST['procurement_id'])) {
         die("<script>alert('Error: Procurement ID is missing.'); window.location.href='procurement.php';</script>");
     }
 
     $procurement_id = intval($_POST['procurement_id']);
 
-    // ✅ Prevent deletion of approved/completed requests
+    // Prevent deletion of approved/completed requests
     $check_stmt = $conn->prepare("SELECT status FROM procurement WHERE procurement_id = ?");
     $check_stmt->bind_param("i", $procurement_id);
     $check_stmt->execute();
     $result = $check_stmt->get_result();
     $row = $result->fetch_assoc();
 
-    if ($row && in_array($row['status'], ['approved', 'completed'])) {
+    if ($row && in_array($row['status'], ['APPROVED', 'COMPLETED'])) {
         die("<script>alert('Cannot delete an approved or completed request.'); window.location.href='procurement.php';</script>");
     }
 
-    // ✅ Proceed with deletion
+    // Proceed with deletion
     $stmt = $conn->prepare("DELETE FROM procurement WHERE procurement_id = ?");
     $stmt->bind_param("i", $procurement_id);
 
@@ -62,7 +62,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <form method="POST">
         <label>Procurement ID:</label> 
         <input type="number" name="procurement_id" required><br>
-        <!-- ✅ CSRF Token-->
+        <!-- CSRF Token-->
         <input type="hidden" name="csrf_token" value="<?= generateCsrfToken(); ?>">
         <button type="submit">Delete Request</button>
     </form>
