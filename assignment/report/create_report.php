@@ -89,6 +89,7 @@
 </header>
 <body>
     <div class="container">
+    <h2> Generate Procurement Activities Report</h2>
         <form action="insert_report.php" method="POST">
         <div class="row">
             <label for="order">Order ID *</label>

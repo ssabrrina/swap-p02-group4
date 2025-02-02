@@ -116,6 +116,7 @@ $row = $result->fetch_assoc();
 </header>
 <body>
 <div class="container">
+<h2>Edit Procurement Activities Report</h2>
     <form action="update_report.php?greport_ID=<?php echo $edit_reportid ?>" method="POST">
         <div class="row">
             <label for="upd_reportid">Report ID:</label>
