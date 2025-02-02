@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 01, 2025 at 09:23 PM
+-- Generation Time: Feb 02, 2025 at 04:44 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -37,8 +37,13 @@ CREATE TABLE `category` (
 --
 
 INSERT INTO `category` (`CATEGORY_ID`, `NAME`) VALUES
-(1, 'Food'),
-(2, 'Transport');
+(1, 'Electronics'),
+(2, 'Home Appliances'),
+(3, 'Clothing'),
+(4, 'Furniture'),
+(5, 'Food and beverages '),
+(6, 'Beauty'),
+(7, 'Toys');
 
 -- --------------------------------------------------------
 
@@ -81,13 +86,9 @@ CREATE TABLE `inventory` (
 --
 
 INSERT INTO `inventory` (`ITEM_ID`, `NAME`, `SKU`, `PRICE`, `CATEGORY_ID`, `DESCRIPTION`, `QUANTITY`, `STOCK`) VALUES
-(2, 'gaming chair', 'sku123', 589.90, 1, 'yummmyyyyz', 5, 5),
-(3, 'Tennis Racket', 'sku124', 450.00, 1, 'beginner level', 101, 101),
-(4, 'bed sheets', 'sku127', 6.80, 1, 'comfy', 2, 2),
-(5, 'ss', 'sku189', 2.00, 2, '222', 22, -2),
-(7, 'Paper Clips', 'sku88', 9.99, 1, 'aa', 9, 9),
-(9, 'Paper Clips', 'sku889', 2.00, 1, 's', 2, 2),
-(12, 'Paper Clips', 'sku8888', 2990.00, 1, 'aa', 2, 2);
+(21, 'Paper Clips', 'SKU123', 0.99, 1, 'For everyday organizing', 190, 190),
+(22, 'Gaming chair', 'SKU124', 679.00, 4, 'Comfortable and affordable', 290, 290),
+(23, 'Tennis Racket', 'SKU125', 300.90, 1, 'For beginners', 12, 12);
 
 -- --------------------------------------------------------
 
@@ -146,7 +147,6 @@ CREATE TABLE `procurement` (
 
 INSERT INTO `procurement` (`PROCUREMENT_ID`, `ITEM_ID`, `QUANTITY`, `DEPARTMENT_ID`, `PRIORITY_LEVEL`, `STATUS`, `USER_ID`, `DATE_REQUESTED`) VALUES
 (1, 1, 3, 1, 'Medium', 'APPROVED', 1, '2025-01-09 22:30:48.000000'),
-(2, 1, 3, 1, 'Medium', 'APPROVED', 3, '2025-01-11 22:30:48.000000'),
 (3, 1, 3, 2, 'Medium', 'COMPLETED', 6, '2025-01-19 22:30:48.000000'),
 (4, 1, 3, 2, 'Medium', 'PENDING', 9, '2025-01-11 22:30:48.000000'),
 (5, 3, 2, 2, 'Medium', 'APPROVED', 3, '2025-02-01 21:21:57.000000');
@@ -166,13 +166,6 @@ CREATE TABLE `report` (
   `ITEM_ID` int(11) DEFAULT NULL,
   `STOCK` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `report`
---
-
-INSERT INTO `report` (`REPORT_ID`, `ORDER_ID`, `ORDER_HISTORY`, `VENDOR_ID`, `PERFORMANCE`, `ITEM_ID`, `STOCK`) VALUES
-(1, 21, '2024-02-02 17:56:00.000000', 435, 'Efficient and professional', 3347, 596),
 
 -- --------------------------------------------------------
 
@@ -221,10 +214,10 @@ INSERT INTO `user` (`USER_ID`, `USERNAME`, `PASSWORD`, `EMAIL`, `ROLE_ID`, `need
 (2, 'Jaimie2', '$2y$10$XwFPmGTzWyFOM6xq9.8ukOcYZAprTejeXBUk1FNlP5xvRg8unnmkW', '2303934J@student.tp.edu.sg', 2, 1, NULL, NULL),
 (3, 'Angelica1', '$2y$10$Eyp39tvQfen0krAdYMXDdu5D6mNKLfNMQA.4a/kZouSpy5WHafTU6', '2304293J@student.tp.edu.sg', 1, 0, NULL, NULL),
 (4, 'Angelica2', '$2y$10$Eo9XxfiGrqTt12stwHtvKeKXzNpErmUuqfbjNfj6rZ5oJsjYkqUKW', '2304293J@student.tp.edu.sg', 2, 1, NULL, NULL),
-(5, 'Angelica3', '$2y$10$Eo9XxfiGrqTt12stwHtvKeKXzNpErmUuqfbjNfj6rZ5oJsjYkqUKW', '2304293J@student.tp.edu.sg', 3, 1, NULL, NULL),
-(6, 'Sabrina1', '$2y$10$Eo9XxfiGrqTt12stwHtvKeKXzNpErmUuqfbjNfj6rZ5oJsjYkqUKW', '2302560D@student.tp.edu.sg', 1, 1, NULL, NULL),
-(7, 'Sabrina2', '$2y$10$Eo9XxfiGrqTt12stwHtvKeKXzNpErmUuqfbjNfj6rZ5oJsjYkqUKW', '2302560D@student.tp.edu.sg', 2, 1, NULL, NULL),
-(8, 'Sabrina3', '$2y$10$Eo9XxfiGrqTt12stwHtvKeKXzNpErmUuqfbjNfj6rZ5oJsjYkqUKW', '2302560D@student.tp.edu.sg', 3, 1, NULL, NULL),
+(5, 'Angelica3', '$2y$10$Eo9XxfiGrqTt12stwHtvKeKXzNpErmUuqfbjNfj6rZ5oJsjYkqUKW', '2304293J@student.ep.edu.sg', 3, 1, NULL, NULL),
+(6, 'Sabrina1', '$2y$10$Eo9XxfiGrqTt12stwHtvKeKXzNpErmUuqfbjNfj6rZ5oJsjYkqUKW', '2302560D@student.ep.edu.sg', 1, 1, NULL, NULL),
+(7, 'Sabrina2', '$2y$10$Eo9XxfiGrqTt12stwHtvKeKXzNpErmUuqfbjNfj6rZ5oJsjYkqUKW', '2302560D@student.ep.edu.sg', 2, 1, NULL, NULL),
+(8, 'Sabrina3', '$2y$10$Eo9XxfiGrqTt12stwHtvKeKXzNpErmUuqfbjNfj6rZ5oJsjYkqUKW', '2302560D@student.ep.edu.sg', 3, 1, NULL, NULL),
 (9, 'Zarah1', '$2y$10$Eo9XxfiGrqTt12stwHtvKeKXzNpErmUuqfbjNfj6rZ5oJsjYkqUKW', '2300166B@student.tp.edu.sg', 1, 1, NULL, NULL),
 (10, 'Zarah2', '$2y$10$Eo9XxfiGrqTt12stwHtvKeKXzNpErmUuqfbjNfj6rZ5oJsjYkqUKW', '2300166B@student.tp.edu.sg', 2, 1, NULL, NULL),
 (11, 'Zarah3', '$2y$10$Eo9XxfiGrqTt12stwHtvKeKXzNpErmUuqfbjNfj6rZ5oJsjYkqUKW', '2300166B@student.tp.edu.sg', 3, 1, NULL, NULL),
@@ -368,7 +361,7 @@ ALTER TABLE `vendor`
 -- AUTO_INCREMENT for table `inventory`
 --
 ALTER TABLE `inventory`
-  MODIFY `ITEM_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `ITEM_ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT for table `orders`
