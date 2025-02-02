@@ -167,6 +167,13 @@ CREATE TABLE `report` (
   `STOCK` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `report`
+--
+
+INSERT INTO `report` (`REPORT_ID`, `ORDER_ID`, `ORDER_HISTORY`, `VENDOR_ID`, `PERFORMANCE`, `ITEM_ID`, `STOCK`) VALUES
+(1, 21, '2024-02-02 17:56:00.000000', 435, 'Efficient and professional', 3347, 596),
+
 -- --------------------------------------------------------
 
 --
@@ -214,10 +221,10 @@ INSERT INTO `user` (`USER_ID`, `USERNAME`, `PASSWORD`, `EMAIL`, `ROLE_ID`, `need
 (2, 'Jaimie2', '$2y$10$XwFPmGTzWyFOM6xq9.8ukOcYZAprTejeXBUk1FNlP5xvRg8unnmkW', '2303934J@student.tp.edu.sg', 2, 1, NULL, NULL),
 (3, 'Angelica1', '$2y$10$Eyp39tvQfen0krAdYMXDdu5D6mNKLfNMQA.4a/kZouSpy5WHafTU6', '2304293J@student.tp.edu.sg', 1, 0, NULL, NULL),
 (4, 'Angelica2', '$2y$10$Eo9XxfiGrqTt12stwHtvKeKXzNpErmUuqfbjNfj6rZ5oJsjYkqUKW', '2304293J@student.tp.edu.sg', 2, 1, NULL, NULL),
-(5, 'Angelica3', '$2y$10$Eo9XxfiGrqTt12stwHtvKeKXzNpErmUuqfbjNfj6rZ5oJsjYkqUKW', '2304293J@student.ep.edu.sg', 3, 1, NULL, NULL),
-(6, 'Sabrina1', '$2y$10$Eo9XxfiGrqTt12stwHtvKeKXzNpErmUuqfbjNfj6rZ5oJsjYkqUKW', '2302560D@student.ep.edu.sg', 1, 1, NULL, NULL),
-(7, 'Sabrina2', '$2y$10$Eo9XxfiGrqTt12stwHtvKeKXzNpErmUuqfbjNfj6rZ5oJsjYkqUKW', '2302560D@student.ep.edu.sg', 2, 1, NULL, NULL),
-(8, 'Sabrina3', '$2y$10$Eo9XxfiGrqTt12stwHtvKeKXzNpErmUuqfbjNfj6rZ5oJsjYkqUKW', '2302560D@student.ep.edu.sg', 3, 1, NULL, NULL),
+(5, 'Angelica3', '$2y$10$Eo9XxfiGrqTt12stwHtvKeKXzNpErmUuqfbjNfj6rZ5oJsjYkqUKW', '2304293J@student.tp.edu.sg', 3, 1, NULL, NULL),
+(6, 'Sabrina1', '$2y$10$Eo9XxfiGrqTt12stwHtvKeKXzNpErmUuqfbjNfj6rZ5oJsjYkqUKW', '2302560D@student.tp.edu.sg', 1, 1, NULL, NULL),
+(7, 'Sabrina2', '$2y$10$Eo9XxfiGrqTt12stwHtvKeKXzNpErmUuqfbjNfj6rZ5oJsjYkqUKW', '2302560D@student.tp.edu.sg', 2, 1, NULL, NULL),
+(8, 'Sabrina3', '$2y$10$Eo9XxfiGrqTt12stwHtvKeKXzNpErmUuqfbjNfj6rZ5oJsjYkqUKW', '2302560D@student.tp.edu.sg', 3, 1, NULL, NULL),
 (9, 'Zarah1', '$2y$10$Eo9XxfiGrqTt12stwHtvKeKXzNpErmUuqfbjNfj6rZ5oJsjYkqUKW', '2300166B@student.tp.edu.sg', 1, 1, NULL, NULL),
 (10, 'Zarah2', '$2y$10$Eo9XxfiGrqTt12stwHtvKeKXzNpErmUuqfbjNfj6rZ5oJsjYkqUKW', '2300166B@student.tp.edu.sg', 2, 1, NULL, NULL),
 (11, 'Zarah3', '$2y$10$Eo9XxfiGrqTt12stwHtvKeKXzNpErmUuqfbjNfj6rZ5oJsjYkqUKW', '2300166B@student.tp.edu.sg', 3, 1, NULL, NULL),
