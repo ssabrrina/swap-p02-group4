@@ -45,13 +45,13 @@ $username = $_SESSION['session_username']; // Get username from session
 
             <?php if ($role_id == '2'): ?> <!-- ✅ If user is Department Head (Role ID 2) -->
                 <button onclick="window.location.href='procurement/procurement.php'">Procurement Records</button> <!-- Button for procurement -->
-                <button onclick="window.location.href='inventory/inventory.php'">Inventory</button> <!-- Button for inventory -->
+                <button onclick="window.location.href='order/read_orders.php'">Purchase Orders</button> <!-- Button for inventory -->
             <?php endif; ?>
 
             <?php if ($role_id == '3'): ?> <!-- ✅ If user is Procurement officer (Role ID 3) -->
                 <button onclick="window.location.href='vendors/vendor.php'">Manage Vendors</button> <!-- Button to manage vendors -->
                 <button onclick="window.location.href='procurement/procurement.php'">View Procurement Records</button> <!-- View only procurement records -->
-                <button onclick="window.location.href='order/read_orders.php'">Purchase Orders</button> <!-- Create purchase requests -->
+                <button onclick="window.location.href='inventory/inventory.php'">Inventory</button> <!-- Create purchase requests -->
             <?php endif; ?>
         </div>
     </div>
