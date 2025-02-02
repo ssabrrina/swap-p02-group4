@@ -120,7 +120,7 @@
 </header>
 <nav>
     <ul>
-    <li><a href="../dashboard.php">Dashboard</a></li>
+        <li><a href="../dashboard.php">Dashboard</a></li>
         <li><a href="../vendors/vendor.php">Vendor</a></li>
         <li><a href="../inventory/inventory.php">Inventory Management</a></li>
         <li><a href="../procurement/procurement.php">Procurement Request</a></li>
