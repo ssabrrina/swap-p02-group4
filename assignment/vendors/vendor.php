@@ -126,7 +126,7 @@ try {
                                     <form method="post" class="inline-form">
                                         <input type="hidden" name="delete_id" value="<?= $row['VENDOR_ID'] ?>">
                                         <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf_token) ?>">
-                                        <button type="submit" class="delete" onclick="confirmDelete(<?= $row['VENDOR_ID'] ?>)">Delete</button>
+                                        <button type="submit" class="delete" onclick="return confirmDelete(<?= $row['VENDOR_ID'] ?>)">Delete</button>
                                     </form>
                                 <?php endif; ?>
                             </div>
