@@ -1,5 +1,5 @@
 <?php
-include '../security.php'; // Ensure this file contains necessary security functions
+include '../security.php'; // Ensure security functions are included
 include '../config.php';
 include '../header.php'; 
 include '../navigation.php'; 
@@ -27,34 +27,53 @@ try {
     die("Error fetching categories: " . $e->getMessage());
 }
 
-$creationSuccess = false;  // Flag to track creation success
+// Initialize variables
+$creationSuccess = false;
+$error_message = "";
 
+// Handle form submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // CSRF token validation
     if (!validateCsrfToken($_POST['csrf_token'])) {
-        die('CSRF token mismatch');
+        $error_message = 'CSRF token mismatch.';
     }
 
-    // Sanitize and validate all inputs
+    // Sanitize and validate inputs
     $name = validateInput($_POST['name']);
     $sku = validateInput($_POST['sku']);
-    $price = validateInput($_POST['price']);
-    $category_id = validateInput($_POST['category_id']);
+    $price = filter_input(INPUT_POST, 'price', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+    $category_id = filter_input(INPUT_POST, 'category_id', FILTER_SANITIZE_NUMBER_INT);
     $description = validateInput($_POST['description']);
-    $quantity = validateInput($_POST['quantity']);
-    $stock = validateInput($_POST['stock']);
+    $quantity = filter_input(INPUT_POST, 'quantity', FILTER_SANITIZE_NUMBER_INT);
+    $stock = filter_input(INPUT_POST, 'stock', FILTER_SANITIZE_NUMBER_INT);
 
-    $sql = "INSERT INTO inventory (NAME, SKU, PRICE, CATEGORY_ID, DESCRIPTION, QUANTITY, STOCK) VALUES (?, ?, ?, ?, ?, ?, ?)";
-    $stmt = $conn->prepare($sql);
+    // Input validation
+    if (!preg_match('/^[A-Za-z0-9 ]+$/', $name)) {
+        $error_message = "Invalid Name: Only letters, numbers, and spaces are allowed.";
+    } elseif (!preg_match('/^[A-Za-z0-9]+$/', $sku)) {
+        $error_message = "Invalid SKU: Must be alphanumeric.";
+    } elseif ($price < 0 || !preg_match('/^\d+(\.\d{1,2})?$/', $price)) {
+        $error_message = "Invalid Price: Must be a non-negative number with up to two decimal places.";
+    }
 
-    try {
-        if ($stmt->execute([$name, $sku, $price, $category_id, $description, $quantity, $stock])) {
-            $creationSuccess = true; // Update success flag
+    if (empty($error_message)) {
+        // Prepared statement to insert data
+        $stmt = $conn->prepare("INSERT INTO inventory (NAME, SKU, PRICE, CATEGORY_ID, DESCRIPTION, QUANTITY, STOCK) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssdisii", $name, $sku, $price, $category_id, $description, $quantity, $stock);
+
+        try {
+            if ($stmt->execute()) {
+                $creationSuccess = true; 
+            }
+        } catch (Exception $e) {
+            $error_message = "Error: " . $e->getMessage();
         }
-    } catch (Exception $e) {
-        echo "Error: " . $e->getMessage();
+
+        $stmt->close();
     }
 }
+
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -67,21 +86,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <div class="container">
-    <h2>Add Inventory </h2>
+        <h2>Add Inventory</h2>
+
+        <!-- Show error message if validation fails -->
+        <?php if (!empty($error_message)): ?>
+            <div class="alert alert-danger"><?= htmlspecialchars($error_message) ?></div>
+        <?php endif; ?>
+
         <form action="create.php" method="post">
             <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']); ?>">
-        <div class="form-group">
+
+            <div class="form-group">
                 <label for="name">Product Name *</label>
-                <input type="text" id="name" name="name" required>
+                <input type="text" id="name" name="name" required pattern="[A-Za-z0-9 ]+" title="Only letters, numbers, and spaces are allowed.">
             </div>
-                <div class="form-group">
+
+            <div class="form-group">
                 <label for="sku">SKU *</label>
-                <input type="text" id="sku" name="sku" required pattern="[A-Za-z0-9]+" title="SKU should be alphanumeric.">
-                </div>
+                <input type="text" id="sku" name="sku" required pattern="[A-Za-z0-9]+" title="SKU must be alphanumeric.">
+            </div>
+
             <div class="form-group">
                 <label for="price">Price *</label>
-                <input type="number" id="price" name="price" required step="0.01" min="0" title="Price must be a non-negative number.">
-                </div>
+                <input type="number" id="price" name="price" required step="0.01" min="0" title="Price must be a non-negative number with up to two decimal places.">
+            </div>
+
             <div class="form-group">
                 <label for="category_id">Category ID *</label>
                 <select id="category_id" name="category_id" required>
@@ -97,20 +126,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <label for="description">Description *</label>
                 <textarea id="description" name="description" required></textarea>
             </div>
+
             <div class="form-group">
                 <label for="quantity">Quantity *</label>
                 <input type="number" id="quantity" name="quantity" required>
             </div>
+
             <div class="form-group">
                 <label for="stock">Stock Level *</label>
                 <input type="number" id="stock" name="stock" required>
             </div>
+
             <button type="submit" class="btn-create">Create Item</button>
-            </form>
+        </form>
+
+        <!-- Redirect if successfully created -->
         <?php if ($creationSuccess): ?>
-        <script>alert('ITEM SUCCESSFULLY CREATED!');
-            window.location.href = 'inventory.php';
-        </script>
+            <script>
+                alert('ITEM SUCCESSFULLY CREATED!');
+                window.location.href = 'inventory.php';
+            </script>
         <?php endif; ?>
     </div>
 </body>
