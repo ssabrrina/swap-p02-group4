@@ -40,7 +40,9 @@ if (isset($_GET['vendor_id'])) {
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && $vendor) {
     // validate CSRF token before processing the request
     if (!isset($_POST['csrf_token']) || !validateCsrfToken($_POST['csrf_token'])) {
-        die("CSRF validation failed! Unauthorized request.");
+        $_SESSION['error_message'] = "Unsuccessful Vendor Update. CSRF validation failed!";
+        header("Location: update.php");
+        exit;
     }
 
     // get updated inputs
@@ -50,8 +52,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $vendor) {
     $service_id = validateInput($_POST['SERVICE_ID']);
     $payment_id = validateInput($_POST['PAYMENT_ID']);
 
+    if (empty($name)) {
+        $error = "Vendor name cannot be empty.";
+    } elseif (empty($email)) {
+        $error = "Email cannot be empty.";
+    } elseif (empty($telephone_number)) {
+        $error = "Phone number cannot be empty.";
+    } elseif (empty($service_id)) {
+        $error = "Please select a service type.";
+    } elseif (empty($payment_id)) {
+        $error = "Please select a payment term.";
+    } 
     // validate email format
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    elseif (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $error = "Invalid email format.";
     }
 
@@ -145,6 +158,11 @@ $payment_terms = $conn->query("SELECT PAYMENT_ID, name FROM payment_terms");
 
         <?php if (!empty($error)): ?>
             <div class="message error"><?= htmlspecialchars($error) ?></div>
+        <?php endif; ?>
+
+        <?php if (isset($_SESSION['error_message'])): ?>
+            <div class="message error"><?= htmlspecialchars($_SESSION['error_message']) ?></div>
+            <?php unset($_SESSION['error_message']); // Clear message after displaying ?>
         <?php endif; ?>
 
         <?php if (!empty($success)): ?>
