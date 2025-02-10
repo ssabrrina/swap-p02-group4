@@ -1,22 +1,22 @@
 <?php
 session_start(); // ✅ Ensure that session handling starts in every file that includes this script
 
-// ✅ Set session timeout (15 minutes)
+// Set session timeout (15 minutes)
 define('SESSION_TIMEOUT', 900); // 900 seconds = 15 minutes
 
-// ✅ Check if session timeout has been exceeded
+// Check if session timeout has been exceeded
 if (isset($_SESSION['last_activity']) && (time() - $_SESSION['last_activity']) > SESSION_TIMEOUT) {
     // If the last activity timestamp is older than the defined timeout, destroy the session and log the user out
     session_unset(); // Remove all session variables
     session_destroy(); // Destroy the session
-    header("Location: login.php?timeout=1"); // Redirect to login with a timeout flag
+    header("Location: ../login.php?timeout=1"); // Redirect to login with a timeout flag
     exit; // Ensure script execution stops after redirect
 }
 
-// ✅ Update last activity timestamp to the current time to maintain session validity
+// Update last activity timestamp to the current time to maintain session validity
 $_SESSION['last_activity'] = time();
 
-// ✅ Secure session settings
+// Secure session settings
 if (session_status() === PHP_SESSION_NONE) { // Check if the session is not already started
     session_start(); // Start a new session
     ini_set('session.cookie_httponly', 1); // Prevent JavaScript from accessing session cookies (protection against XSS)
@@ -24,7 +24,7 @@ if (session_status() === PHP_SESSION_NONE) { // Check if the session is not alre
     ini_set('session.use_strict_mode', 1); // Prevent session fixation attacks by rejecting uninitialized session IDs
 }
 
-// ✅ Input validation function to sanitize user input
+// Input validation function to sanitize user input
 function validateInput($data) {
     $data = trim($data); // Remove whitespace from the beginning and end of the string
     $data = stripslashes($data); // Remove backslashes (\) from the string
@@ -32,7 +32,7 @@ function validateInput($data) {
     return $data; // Return sanitized data
 }
 
-// ✅ CSRF (Cross-Site Request Forgery) Protection Functions
+// CSRF (Cross-Site Request Forgery) Protection Functions
 
 // Generate a CSRF token if one does not exist
 function generateCsrfToken() {
@@ -47,7 +47,7 @@ function validateCsrfToken($token) {
     return isset($_SESSION['csrf_token']) && hash_equals($_SESSION['csrf_token'], $token); // Compare the submitted token with the stored token
 }
 
-// ✅ Data Encryption & Decryption Functions
+// Data Encryption & Decryption Functions
 
 // Encrypt data using AES-256-CBC encryption method
 function encryptData($data, $key) {
@@ -64,16 +64,16 @@ function decryptData($encryptedData, $key) {
     return openssl_decrypt($ciphertext, 'AES-256-CBC', $key, 0, $iv); // Decrypt the data and return it
 }
 
-// ✅ Role-Based Access Restriction Function
+// Role-Based Access Restriction Function
 
 function restrictAccess($allowed_roles, $redirect_url, $message) {
-    // ✅ Ensure user is logged in
+    // Ensure user is logged in
     if (!isset($_SESSION['session_role'])) { // If user session role is not set
         $message = "You are not logged in. Redirecting to Login..."; // Update message
-        $redirect_url = "login.php"; // Redirect to login page
+        $redirect_url = "../login.php"; // Redirect to login page
     }
 
-    // ✅ Check if the user has permission based on their role
+    // Check if the user has permission based on their role
     if (!isset($_SESSION['session_role']) || !in_array($_SESSION['session_role'], $allowed_roles)) {
         ?>
         <!DOCTYPE html>
@@ -85,7 +85,7 @@ function restrictAccess($allowed_roles, $redirect_url, $message) {
             <link rel="stylesheet" href="style.css"> <!-- Include CSS for styling -->
             <script src="functions.js"></script> <!-- Include JavaScript functions -->
             <script>
-                // ✅ Redirect user with a success message
+                // Redirect user with a success message
                 showSuccessMessageAndRedirect("<?= addslashes($message) ?>", "<?= addslashes($redirect_url) ?>");
             </script>
         </head>

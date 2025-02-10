@@ -20,7 +20,7 @@ $query = "SELECT
         FROM procurement p
         LEFT JOIN inventory i ON p.item_id = i.item_id
         LEFT JOIN department d ON p.department_id = d.department_id
-        LEFT JOIN user u ON p.user_id = u.user_id";  // ✅ Join users table to get requester name
+        LEFT JOIN user u ON p.user_id = u.user_id";  // Join users table to get requester name
 
 $result = $conn->query($query);
 
@@ -85,7 +85,7 @@ if (!$result) {
                         <div class="button-group"> <!-- Flexbox container -->
                             <button onclick="window.location.href='update.php?procurement_id=<?= $row['procurement_id'] ?>'">Update</button>
                                     <!--(isset($_SESSION['session_role']))-->
-                            <?php if ($_SESSION['session_role'] == 1): ?> <!-- ✅ Only Role ID 1 sees delete button -->
+                            <?php if ($_SESSION['session_role'] == 1): ?> <!-- Only Role ID 1 sees delete button -->
                                     <!-- Secure Form for Deletion with CSRF Protection -->
                                     <form method="post" action="delete.php" style="display:inline;">
                                         <input type="hidden" name="procurement_id" value="<?= $row['procurement_id'] ?>">

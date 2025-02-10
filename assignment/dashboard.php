@@ -3,7 +3,7 @@
 include_once 'config.php';
 include_once 'security.php';
 
-restrictAccess([1, 2, 3], "login.php", "Unidentified permission. Redirecting to login page...");
+restrictAccess([1, 2, 3], "../login.php", "Unidentified permission. Redirecting to login page...");
 
 // ✅ Retrieve user details from session
 $role_id = $_SESSION['session_role']; // Get user's role ID from session
@@ -45,7 +45,6 @@ $username = $_SESSION['session_username']; // Get username from session
 
             <?php if ($role_id == '2'): ?> <!-- ✅ If user is Department Head (Role ID 2) -->
                 <button onclick="window.location.href='procurement/create.php'">Create Procurement Records</button> <!-- Button for procurement -->
-                <button onclick="window.location.href='order/read_orders.php'">Purchase Orders</button> <!-- Button for inventory -->
             <?php endif; ?>
 
             <?php if ($role_id == '3'): ?> <!-- ✅ If user is Procurement officer (Role ID 3) -->

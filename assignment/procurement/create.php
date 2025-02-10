@@ -4,9 +4,6 @@ include '../security.php';
 include '../header.php';
 include '../navigation.php';
 
-// Restrict Access: Only Admins and Procurement Officers
-restrictAccess([1, 3], "../dashboard.php", "You do not have permission to access this page.");
-
 // Check if user is logged in
 if (!isset($_SESSION['session_userid'])) {
     die("<script>alert('Error: User not logged in. Please log in again.'); window.location.href='../login.php';</script>");

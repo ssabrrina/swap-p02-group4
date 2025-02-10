@@ -5,20 +5,20 @@ include_once 'security.php'; // Include security functions for validation and pr
 $error = ''; // Variable to store error messages
 $success = ''; // Variable to store success messages
 
-// ✅ Generate CSRF Token for the form
+//  Generate CSRF Token for the form
 $csrf_token = generateCsrfToken();
 
-// ✅ Get the token from the URL
+// Get the token from the URL
 $token = $_GET['token'] ?? null; // Retrieve the token from the URL or set it to null if not provided
 $time = time(); // Get the current timestamp
 $token_valid = false;
 
-// ✅ Check if the token is missing or invalid
+// Check if the token is missing or invalid
 if (!$token) {
     $error = "Invalid or missing token."; // Set an error message if token is not present
 } else {
     try {
-        // ✅ Fetch the user associated with the token if it is still valid
+        // Fetch the user associated with the token if it is still valid
         $stmt = $conn->prepare("SELECT username FROM user WHERE token = ? AND token_expires > ?");
         $stmt->bind_param("si", $token, $time); // Bind the token and current timestamp to the query
         $stmt->execute(); // Execute the query
@@ -38,26 +38,26 @@ if (!$token) {
     }
 }
 
-// ✅ Handle form submission when the user submits a new password
+// Handle form submission when the user submits a new password
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($error)) { // Check if the request is POST and no errors exist
-    // ✅ Validate CSRF token before processing the request
+    // Validate CSRF token before processing the request
     if (!validateCsrfToken($_POST['csrf_token'])) {
         $error = "Invalid request. Please try again.";
     } else {
         $new_password = validateInput($_POST['new_password']); // Sanitize the new password input
         $confirm_password = validateInput($_POST['confirm_password']); // Sanitize the confirm password input
 
-        // ✅ Validate the new password fields
+        // Validate the new password fields
         if (empty($new_password) || empty($confirm_password)) { // Check if any field is empty
             $error = "All fields are required."; // Set an error message
         } elseif ($new_password !== $confirm_password) { // Check if passwords match
             $error = "Passwords do not match."; // Set an error message if they don't match
         } else {
             try {
-                // ✅ Hash the new password for security before storing in the database
+                //  Hash the new password for security before storing in the database
                 $hashed_password = password_hash($new_password, PASSWORD_DEFAULT);
 
-                // ✅ Update the user's password and clear the token
+                // Update the user's password and clear the token
                 $stmt = $conn->prepare("UPDATE user SET password = ?, token = NULL, token_expires = NULL, needs_password_reset = 0 WHERE username = ?");
                 $stmt->bind_param("ss", $hashed_password, $username); // Bind new password and username
 
@@ -93,7 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($error)) { // Check if the re
     <div class="container">
         <h1>Reset Password</h1>
 
-        <!-- ✅ Display error messages if any exist -->
+        <!-- Display error messages if any exist -->
         <?php if (!empty($error)): ?>
             <div class="message error"><?= htmlspecialchars($error) ?></div>
         <?php endif; ?>
@@ -102,9 +102,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && empty($error)) { // Check if the re
             <div class="message success"><?= htmlspecialchars($success) ?></div> <!-- Display the success message safely -->
             <a href="login.php">Login</a> <!-- Provide a link to login after a successful password reset -->
         <?php elseif ($token_valid): ?>
-            <!-- ✅ Password Reset Form -->
+            <!-- Password Reset Form -->
             <form method="post">
-                <!-- ✅ CSRF Protection: Add a hidden field for CSRF token -->
+                <!-- CSRF Protection: Add a hidden field for CSRF token -->
                 <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($csrf_token) ?>">
 
                 <div class="form-group">

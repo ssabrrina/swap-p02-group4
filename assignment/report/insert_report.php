@@ -3,7 +3,7 @@
 <?php
 
 //connect to database
-$con = mysqli_connect("localhost","admin","admin","swap_assignment_db"); 
+$con = mysqli_connect("localhost","root","","swap_assignment_db"); 
 if (!$con){
 	die('Could not connect: ' . mysqli_connect_errno()); //return error is connect fail
 }

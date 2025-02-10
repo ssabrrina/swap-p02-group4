@@ -1,5 +1,5 @@
 <?php
-$con = mysqli_connect("localhost","admin","admin","swap_assignment_db"); //connect to database
+$con = mysqli_connect("localhost","root","","swap_assignment_db"); //connect to database
 if (!$con){
  die('Could not connect: ' . mysqli_connect_errno()); //return error is connect fail
 }

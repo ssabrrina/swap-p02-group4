@@ -5,7 +5,7 @@ include_once 'security.php'; // Include security functions
 $error = ''; // Variable for storing error messages
 $success = ''; // Variable for storing success messages
 
-// ✅ Check if session timeout happened
+// Check if session timeout happened
 if (isset($_GET['timeout']) && $_GET['timeout'] == 1) { // If the URL contains 'timeout=1', it means the session expired
     $error = "Your session has expired due to inactivity. Please log in again."; // Set an error message for session timeout
 }
