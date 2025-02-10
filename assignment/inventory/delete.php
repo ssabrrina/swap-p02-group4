@@ -3,7 +3,7 @@ include '../config.php';
 include '../security.php';
 
 
-// Restrict access to Admins only
+// ✅ Restrict access to Admins only
 restrictAccess([1], "../dashboard.php", "You do not have permission to delete procurement requests.");
 
 // Establish a new mysqli connection
