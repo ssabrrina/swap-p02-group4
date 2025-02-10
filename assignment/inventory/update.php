@@ -5,6 +5,8 @@ include '../header.php';
 include '../navigation.php'; 
 include '../back_button.php';
 
+restrictAccess([1, 3], "../dashboard.php", "You do not have permission to update inventory.");
+
 // Establish a new mysqli connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
@@ -56,13 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $item) {
     // Sanitizing inputs
     $name = validateInput($_POST['name']);
     $sku = validateInput($_POST['sku']);  // Handle SKU
-    if (!preg_match('/^[A-Za-z0-9]+$/', $sku)) {
-        die('SKU must be alphanumeric.');
-    }
     $price = filter_input(INPUT_POST, 'price', FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-    if ($price < 0 || !preg_match('/^\d+(\.\d{1,2})?$/', $price)) {
-        die('Price must be a non-negative number with up to two decimal places.');
-    }
     $category_id = filter_input(INPUT_POST, 'category_id', FILTER_SANITIZE_NUMBER_INT);
     $description = validateInput($_POST['description']);
     $quantity = filter_input(INPUT_POST, 'quantity', FILTER_SANITIZE_NUMBER_INT);
@@ -96,15 +92,24 @@ $conn->close();
         </div>
         <div class="form-group">
             <label for="name">Product Name *</label>
-            <input type="text" id="name" name="name" value="<?= htmlspecialchars($item['NAME']) ?>" required>
+            <input type="text" id="name" name="name" 
+                value="<?= htmlspecialchars($_POST['name'] ?? $item['NAME']) ?>" 
+                required pattern="[A-Za-z0-9 ]+" 
+                title="Only letters, numbers, and spaces are allowed.">
         </div>
         <div class="form-group">
             <label for="sku">SKU *</label>
-            <input type="text" id="sku" name="sku" value="<?= htmlspecialchars($item['SKU']) ?>" required>
+            <input type="text" id="sku" name="sku" 
+                value="<?= htmlspecialchars($_POST['sku'] ?? $item['SKU']) ?>" 
+                required pattern="[A-Za-z0-9]+" 
+                title="SKU must be alphanumeric.">
         </div>
         <div class="form-group">
-            <label for="price">Price *</label>
-            <input type="number" id="price" name="price" value="<?= htmlspecialchars($item['PRICE']) ?>" required>
+        <label for="price">Price *</label>
+        <input type="number" id="price" name="price" 
+                value="<?= htmlspecialchars($_POST['price'] ?? $item['PRICE']) ?>" 
+                required step="0.01" min="0" 
+                title="Price must be a non-negative number with up to two decimal places.">
         </div>
         <div class="form-group">
             <label for="category_id">Category ID *</label>
@@ -124,11 +129,17 @@ $conn->close();
         </div>
         <div class="form-group">
             <label for="quantity">Quantity *</label>
-            <input type="number" id="quantity" name="quantity" value="<?= htmlspecialchars($item['QUANTITY']) ?>" required>
+            <input type="number" id="quantity" name="quantity" 
+                value="<?= htmlspecialchars($_POST['quantity'] ?? $item['QUANTITY']) ?>" 
+                required min="1" 
+                title="Quantity must be at least 1.">
         </div>
         <div class="form-group">
-            <label for="stock">Stock Level *</label>
-            <input type="number" id="stock" name="stock" value="<?= htmlspecialchars($item['STOCK']) ?>" required>
+        <label for="stock">Stock Level *</label>
+        <input type="number" id="stock" name="stock" 
+            value="<?= htmlspecialchars($_POST['stock'] ?? $item['STOCK']) ?>" 
+            required min="0" 
+            title="Stock level cannot be negative.">
         </div>
         <button type="submit" class="btn btn-primary btn-update">Update Item</button>
     </form>
