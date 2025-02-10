@@ -5,6 +5,8 @@ include '../header.php';
 include '../navigation.php'; 
 include '../back_button.php';
 
+restrictAccess([1, 3], "../dashboard.php", "You do not have permission to create inventory.");
+
 // Establish a new mysqli connection
 $conn = new mysqli($servername, $username, $password, $dbname);
 
