@@ -2,9 +2,7 @@
 include '../config.php';
 include '../security.php';
 
-
-// ✅ Restrict access to Admins only
-restrictAccess([1], "../dashboard.php", "You do not have permission to delete procurement requests.");
+restrictAccess([1], "../dashboard.php", "You do not have permission to delete inventory.");
 
 // Establish a new mysqli connection
 $conn = new mysqli($servername, $username, $password, $dbname);
