@@ -32,7 +32,7 @@ try {
 echo '<div style="width: 100%; max-width: 1000px; margin: 50px auto; padding: 5px;">
 <h2>Inventory Management</h2>
 <div class="add-inventory-button" style="margin-bottom: 20px; text-align: center;">
-    <button onclick="window.location.href=\'create.php\';" class="btn btn-primary">Add Inventory</button>
+    <button onclick="window.location.href=\'create.php\';" class="btn btn-primary">+ Add Inventory</button>
 </div>
 <table class="inventory-table">
     <thead>
