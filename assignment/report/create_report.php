@@ -16,13 +16,13 @@
             background-size: cover;
             color: white;
             text-align: center;
-            padding: 80px 0;
+            padding: 80px;
         }
 
         .header-content {
             background-color: black; /* Black background for the text box */
             display: inline-block;
-            padding: 1px 20px;
+            padding: 10px 20px;
         }
 
         .container {
@@ -109,26 +109,21 @@
         footer {
             background-color: white; /* White background */
             text-align: center;
-            padding: 35px;
+            padding: 60px;
         }
     </style>
 </head>
-<header>
-    <div class="header-content">
-        <h4>AMC Internal Procurement Management System</h4>
-    </div>
-</header>
-<nav>
-    <ul>
-        <li><a href="../dashboard.php">Dashboard</a></li>
-        <li><a href="../vendors/vendor.php">Vendor</a></li>
-        <li><a href="../inventory/inventory.php">Inventory Management</a></li>
-        <li><a href="../procurement/procurement.php">Procurement Request</a></li>
-        <li><a href="../report/report.php">Report</a></li>
-        <li><a href="../order/read_orders.php">Purchase Orders</a></li>
-        <li><a href="../logout.php">Log Out</a></li>
-    </ul>
-</nav>
+<?php
+include '../security.php';
+include '../header.php';
+include '../navigation.php';
+// Fetch logged-in user ID
+$user_id = $_SESSION['session_userid'];
+if (!isset($_SESSION['session_userid'])) {
+    die("<script>alert('Error: User not logged in. Please log in again.'); window.location.href='../login.php';</script>");
+}
+restrictAccess([1], "dashboard.php", "You do not have permission to access this page.");
+?>
 <body>
     <div class="container">
     <h2> Generate Procurement Activities Report</h2>
@@ -164,7 +159,5 @@
         </form>
     </div>
 </body>
-<footer>
-    <h4>All rights reserved © 2025 Secure AMC System</h4>
-</footer>
 </html>
+<?php include '../footer.php'; ?>

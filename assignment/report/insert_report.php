@@ -1,6 +1,7 @@
 <html>
 <body>  
 <?php
+include '../security.php';
 
 //connect to database
 $con = mysqli_connect("localhost","root","","swap_assignment_db"); 
@@ -10,6 +11,8 @@ if (!$con){
 
 //A. Prepare SQL Statement
 $stmt= $con->prepare("INSERT INTO `report` (`ORDER_ID`,`ORDER_HISTORY`, `VENDOR_ID`, `PERFORMANCE`, `ITEM_ID`, `STOCK`) VALUES (?,?,?,?,?,?)");
+
+
 
 $order = htmlspecialchars($_POST["order"]);
 $history = date('Y-m-d H:i:s', strtotime($_POST["history"]));
@@ -21,10 +24,9 @@ $stock = htmlspecialchars($_POST["stock"]);
 // B. Binding the parameter values to the prepared statement 
 $stmt->bind_param('isisii', $order, $history, $vendor, $performance, $item, $stock); //bind the parameters
 if ($stmt->execute()){  //execute query
-    print "INSERT Query executed.";
-    header("location:report.php");
+    echo "<script>alert('Report created successfully!'); window.location.href='report.php';</script></script>";
 }else{
-    echo "Error executing INSERT query.";
+    die("Error: " . $stmt->error);
 }
 $con->close();
 ?>

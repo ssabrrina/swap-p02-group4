@@ -1,6 +1,8 @@
 <html>
 <body>  
 <?php
+include '../security.php';
+
 $con = mysqli_connect("localhost","root","","swap_assignment_db"); //connect to database
 if (!$con){
  die('Could not connect: ' . mysqli_connect_errno()); //return error is connect fail
@@ -24,11 +26,9 @@ $upd_reportid = htmlspecialchars($_GET["greport_ID"]);
 $query->bind_param('isisiii', $upd_order, $upd_history, $upd_vendor, $upd_performance, $upd_item, $upd_stock, $upd_reportid); 
 
 if ($query->execute()){
-    echo "Update Query executed.";
-    header("location:report.php");
-    exit();
+    echo "<script>alert('Report updated successfully!'); window.location.href='report.php';</script></script>";
 }else{
-    echo "Error executing UPDATE query." . $query->error;
+    die("Error: " . $stmt->error);
 }
 
 $query->close();

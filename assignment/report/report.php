@@ -16,13 +16,13 @@
             background-size: cover;
             color: white;
             text-align: center;
-            padding: 80px 0;
+            padding: 80px;
         }
 
         .header-content {
             background-color: black; /* Black background for the text box */
             display: inline-block;
-            padding: 1px 20px;
+            padding: 10px 20px;
         }
 
         h2 {
@@ -99,16 +99,16 @@
         footer {
             background-color: white; /* White background */
             text-align: center;
-            padding: 35px;
+            padding: 60px;
         }
     </style>
 </head>
-<body>
 <header>
     <div class="header-content">
         <h4>AMC Internal Procurement Management System</h4>
     </div>
 </header>
+<body>
 <nav>
     <ul>
         <li><a href="../dashboard.php">Dashboard</a></li>
@@ -125,6 +125,9 @@
 <button onclick="window.location.href='create_report.php';">Generate Report</button>
 <div class="tables">
 <?php
+include '../security.php';
+restrictAccess([1], "dashboard.php", "You do not have permission to access this page.");
+
 $con = mysqli_connect("localhost","root","","swap_assignment_db"); //connect to database
 if (!$con){
  die('Could not connect: ' . mysqli_connect_errno()); //return error is connect fail
@@ -168,7 +171,5 @@ echo '</table>';
 ?>
 </div>
 </body>
-<footer>
-    <h4>All rights reserved © 2025 Secure AMC System</h4>
-</footer>
 </html>
+<?php include '../footer.php'; ?>
